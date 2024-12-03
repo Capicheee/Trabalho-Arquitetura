@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seleção de CPU</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+        select, input, button {
+            padding: 10px;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        #resultado {
+            border: 1px solid #ddd;
+            padding: 20px;
+            background-color: #f9f9f9;
+            display: none;
+        }
+        #adicionar-modelo {
+            border: 1px solid #ddd;
+            padding: 20px;
+            background-color: #f1f1f1;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Escolha os Critérios</h1>
+
+    <label for="consumo">Consumo de Energia:</label>
+    <select id="consumo">
+        <option value="baixo">Baixo</option>
+        <option value="medio">Médio</option>
+        <option value="alto">Alto</option>
+        <option value="super-alto">Super Alto</option>
+    </select>
+
+    <label for="desempenho">Necessidade de Desempenho:</label>
+    <select id="desempenho">
+        <option value="sim">Processamento Rápido</option>
+        <option value="nao">Não Necessário</option>
+    </select>
+
+    <label for="custo">Custo:</label>
+    <select id="custo">
+        <option value="baixo">CPU Acessível</option>
+        <option value="alto">Alto Investimento</option>
+    </select>
+
+    <label for="aplicacao">Tipo de Aplicação:</label>
+    <select id="aplicacao">
+        <option value="iot">IoT</option>
+        <option value="jogos">Jogos</option>
+        <option value="ia">Inteligência Artificial</option>
+    </select>
+
+    <button onclick="sugerirCPU()">Obter Sugestão</button>
+
+    <div id="resultado">
+        <h2>Sugestão de CPU</h2>
+        <p id="tipo-processador"></p>
+        <p id="tipo-arquitetura"></p>
+        <p id="memoria-cache"></p>
+        <p id="frequencia-cpu"></p>
+        <p id="justificativa"></p>
+    </div>
+
+    <div id="adicionar-modelo">
+        <h2>Adicionar Novo Modelo de CPU</h2>
+        <label for="modelo-nome">Nome do Processador:</label>
+        <input type="text" id="modelo-nome" placeholder="Nome do processador">
+
+        <label for="modelo-arquitetura">Arquitetura:</label>
+        <input type="text" id="modelo-arquitetura" placeholder="Ex: CISC ou RISC">
+
+        <label for="modelo-cache">Memória Cache (Ex: L1 de 64KB, L3 de 8MB):</label>
+        <input type="text" id="modelo-cache" placeholder="Cache">
+
+        <label for="modelo-frequencia">Frequência (Ex: 3.5GHz):</label>
+        <input type="text" id="modelo-frequencia" placeholder="Frequência">
+
+        <label for="modelo-consumo">Consumo de Energia:</label>
+        <input type="text" id="modelo-consumo" placeholder="Consumo de Energia (baixo, médio, alto, super-alto)">
+
+        <label for="modelo-aplicacao">Tipo de Aplicação:</label>
+        <input type="text" id="modelo-aplicacao" placeholder="Tipo de Aplicação (IoT, Jogos, IA)">
+
+        <button onclick="adicionarModelo()">Adicionar Modelo</button>
+    </div>
+
+    <script>
+        const bancoDeDados = [
+            { nome: "Intel Core i9-13900K", arquitetura: "CISC", consumo: "alto", aplicacao: "jogos", cache: "L1 de 64KB, L3 de 30MB", frequencia: "5.8GHz", justificativa: "Processador de alto desempenho para jogos ultra-realistas e jogos pesados, com consumo energético elevado." },
+            { nome: "AMD Ryzen 9 7900X", arquitetura: "CISC", consumo: "alto", aplicacao: "jogos", cache: "L1 de 64KB, L3 de 32MB", frequencia: "4.7GHz", justificativa: "Excelente para jogos de alta performance e processamento gráfico, com maior consumo de energia." },
+            { nome: "Intel Core i7-12700K", arquitetura: "CISC", consumo: "médio", aplicacao: "jogos", cache: "L1 de 64KB, L3 de 25MB", frequencia: "5.0GHz", justificativa: "Boa performance para jogos e equilíbrio entre consumo e poder de processamento." },
+            { nome: "ARM Cortex-A53", arquitetura: "ARM", consumo: "baixo", aplicacao: "iot", cache: "L1 de 32KB, L2 de 256KB", frequencia: "1.2GHz", justificativa: "Processador de baixo consumo, ideal para dispositivos IoT com restrições energéticas." }
+        ];
+
+        function sugerirCPU() {
+            const consumo = document.getElementById("consumo").value;
+            const desempenho = document.getElementById("desempenho").value;
+            const custo = document.getElementById("custo").value;
+            const aplicacao = document.getElementById("aplicacao").value;
+
+            let processador = "";
+            let arquitetura = "";
+            let cache = "";
+            let frequencia = "";
+            let justificativa = "";
+
+            for (let cpu of bancoDeDados) {
+                if (cpu.aplicacao === aplicacao && cpu.consumo === consumo) {
+                    processador = cpu.nome;
+                    arquitetura = cpu.arquitetura;
+                    cache = cpu.cache;
+                    frequencia = cpu.frequencia;
+                    justificativa = cpu.justificativa;
+                    break;
+                }
+            }
+
+            document.getElementById("tipo-processador").innerText = `Tipo de Processador: ${processador}`;
+            document.getElementById("tipo-arquitetura").innerText = `Arquitetura: ${arquitetura}`;
+            document.getElementById("memoria-cache").innerText = `Memória Cache: ${cache}`;
+            document.getElementById("frequencia-cpu").innerText = `Frequência da CPU: ${frequencia}`;
+            document.getElementById("justificativa").innerText = `Justificativa: ${justificativa}`;
+            document.getElementById("resultado").style.display = "block";
+        }
+
+        function adicionarModelo() {
+            const nome = document.getElementById("modelo-nome").value;
+            const arquitetura = document.getElementById("modelo-arquitetura").value;
+            const cache = document.getElementById("modelo-cache").value;
+            const frequencia = document.getElementById("modelo-frequencia").value;
+            const consumo = document.getElementById("modelo-consumo").value;
+            const aplicacao = document.getElementById("modelo-aplicacao").value;
+
+            const novoModelo = {
+                nome,
+                arquitetura,
+                consumo,
+                aplicacao,
+                cache,
+                frequencia,
+                justificativa: `Este processador foi adicionado pelo usuário com as características especificadas.`
+            };
+
+            bancoDeDados.push(novoModelo);
+
+            alert("Novo modelo de CPU adicionado com sucesso!");
+
+            document.getElementById("modelo-nome").value = '';
+            document.getElementById("modelo-arquitetura").value = '';
+            document.getElementById("modelo-cache").value = '';
+            document.getElementById("modelo-frequencia").value = '';
+            document.getElementById("modelo-consumo").value = '';
+            document.getElementById("modelo-aplicacao").value = '';
+        }
+    </script>
+
+</body>
+</html>
